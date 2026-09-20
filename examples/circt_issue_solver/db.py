@@ -54,6 +54,59 @@ _COLS = (
 _INSERT = (f"INSERT INTO attempts ({', '.join(_COLS)}) "
            f"VALUES ({', '.join(['?'] * len(_COLS))})")
 
+# One row per issue whose pipeline reached the Context-Precision Gate — the
+# numbers the proposal's "Expected Results" section promises: context size
+# before/after, which cascade stage fired, gated vs. ungated (gate_enabled=0).
+_GATE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS gate_metrics (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    issue_number         INTEGER NOT NULL,
+    gate_enabled         INTEGER,     -- 0 == ungated baseline run
+    status               TEXT,        -- ok | verification_failed | no_ir | disabled
+    failure_type         TEXT,        -- crash | miscompilation
+    raw_ir_op_count      INTEGER,     -- context size delivered to Fix, ungated
+    sliced_op_count      INTEGER,     -- after stage 1 (== raw under SLICE_IMPL=agent)
+    final_op_count       INTEGER,     -- context size delivered to Fix, gated
+    fast_path            INTEGER,     -- raw repro already under budget -> skipped Reduce
+    localize_stage       TEXT,        -- crash | miscompile | skipped | NULL
+    reduce_stalled       INTEGER,     -- circt-reduce left it over budget
+    semantic_reduce_used INTEGER,     -- LLM structure-preserving reducer ran
+    ir_path              TEXT,
+    created_at           TEXT
+);
+"""
+
+_TIER1_SCHEMA = """
+CREATE TABLE IF NOT EXISTS tier1_metrics (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    issue_number         INTEGER NOT NULL,
+    fault_found          INTEGER,
+    fault_file           TEXT,
+    fault_line           INTEGER,
+    sliced_lit_target    TEXT,
+    diagnosed            INTEGER,
+    formal_applicable    INTEGER,
+    formal_verified      INTEGER,
+    created_at           TEXT
+);
+"""
+
+_GATE_COLS = (
+    "issue_number", "gate_enabled", "status", "failure_type", "raw_ir_op_count",
+    "sliced_op_count", "final_op_count", "fast_path", "localize_stage",
+    "reduce_stalled", "semantic_reduce_used", "ir_path", "created_at",
+)
+_GATE_INSERT = (f"INSERT INTO gate_metrics ({', '.join(_GATE_COLS)}) "
+                f"VALUES ({', '.join(['?'] * len(_GATE_COLS))})")
+
+_TIER1_COLS = (
+    "issue_number", "fault_found", "fault_file", "fault_line",
+    "sliced_lit_target", "diagnosed", "formal_applicable", "formal_verified",
+    "created_at",
+)
+_TIER1_INSERT = (f"INSERT INTO tier1_metrics ({', '.join(_TIER1_COLS)}) "
+                 f"VALUES ({', '.join(['?'] * len(_TIER1_COLS))})")
+
 _node: SQLiteNode | None = None
 
 
@@ -65,7 +118,7 @@ def init_db(path: str) -> None:
     """
     global _node
     _node = SQLiteNode(path, pin_to_current_node=True)
-    get(_node.init_schema.chia_remote(_SCHEMA))
+    get(_node.init_schema.chia_remote(_SCHEMA + _GATE_SCHEMA + _TIER1_SCHEMA))
 
 
 def _db() -> SQLiteNode:
@@ -109,6 +162,40 @@ def record(issue, res: dict, model: str, artifact_dir: str) -> int:
         model, artifact_dir, datetime.now(timezone.utc).isoformat(),
     )
     return get(_db().execute.chia_remote(_INSERT, row)).lastrowid
+
+
+def record_gate(issue_number: int, gate: dict) -> int | None:
+    """Insert one gate_metrics row from a run_issue_remote result's ``gate``
+    dict (issue_task.py builds it around context_precision_gate.run_gate's
+    metrics). No-op when *gate* is falsy (pipeline never reached the Gate)."""
+    if not gate:
+        return None
+    row = (
+        issue_number, _i(gate.get("gate_enabled")), gate.get("status"),
+        gate.get("failure_type"), _i(gate.get("raw_ir_op_count")),
+        _i(gate.get("sliced_op_count")), _i(gate.get("final_op_count")),
+        _i(gate.get("fast_path")), gate.get("localize_stage"),
+        _i(gate.get("reduce_stalled")), _i(gate.get("semantic_reduce_used")),
+        gate.get("ir_path"), datetime.now(timezone.utc).isoformat(),
+    )
+    return get(_db().execute.chia_remote(_GATE_INSERT, row)).lastrowid
+
+
+def record_tier1(issue_number: int, tier1: dict) -> int | None:
+    """Insert one tier1_metrics row from a run_issue_remote result's ``tier1``
+    dict (fault localizer, sliced lit tests, architect diagnosis, formal verifier).
+    No-op when *tier1* is falsy."""
+    if not tier1:
+        return None
+    sliced = tier1.get("sliced_lit_target")
+    sliced_str = json.dumps(sliced) if isinstance(sliced, (list, tuple)) else str(sliced or "")
+    row = (
+        issue_number, _i(tier1.get("fault_found")), tier1.get("fault_file"),
+        _i(tier1.get("fault_line")), sliced_str, _i(tier1.get("diagnosed")),
+        _i(tier1.get("formal_applicable")), _i(tier1.get("formal_verified")),
+        datetime.now(timezone.utc).isoformat(),
+    )
+    return get(_db().execute.chia_remote(_TIER1_INSERT, row)).lastrowid
 
 
 def summary() -> list[tuple]:

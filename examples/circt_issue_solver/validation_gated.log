@@ -1,0 +1,298 @@
+2026-09-02 11:10:37,817 INFO circtissues: LLM backend=opencode model=google-vertex/gemini-3.1-pro-preview
+/home/kudchadkar/miniconda3/envs/circtissues/lib/python3.10/site-packages/ray/_private/worker.py:2052: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+2026-09-02 11:11:19,274 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/2266 → 200
+2026-09-02 11:11:19,760 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/2266/comments → 200
+2026-09-02 11:11:20,373 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/2669 → 200
+2026-09-02 11:11:21,238 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/4354 → 200
+2026-09-02 11:11:22,174 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/4354/comments → 200
+2026-09-02 11:11:23,560 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/4396 → 200
+2026-09-02 11:11:24,849 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/4396/comments → 200
+2026-09-02 11:11:26,111 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/4649 → 200
+2026-09-02 11:11:27,456 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/5626 → 200
+2026-09-02 11:11:29,095 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/5626/comments → 200
+2026-09-02 11:11:30,837 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/5789 → 200
+2026-09-02 11:11:31,288 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/5789/comments → 200
+2026-09-02 11:11:31,700 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/6226 → 200
+2026-09-02 11:11:32,153 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/6226/comments → 200
+2026-09-02 11:11:32,724 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/6740 → 200
+2026-09-02 11:11:33,214 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/6740/comments → 200
+2026-09-02 11:11:33,687 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7127 → 200
+2026-09-02 11:11:34,167 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7388 → 200
+2026-09-02 11:11:34,645 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7531 → 200
+2026-09-02 11:11:35,033 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7531/comments → 200
+2026-09-02 11:11:35,612 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7949 → 200
+2026-09-02 11:11:36,088 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/7949/comments → 200
+2026-09-02 11:11:36,566 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/8508 → 200
+2026-09-02 11:11:37,074 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/10104 → 200
+2026-09-02 11:11:37,536 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/10571 → 200
+2026-09-02 11:11:38,004 DEBUG GithubIssuesNode: GET https://api.github.com/repos/llvm/circt/issues/10571/comments → 200
+2026-09-02 11:11:38,005 INFO circtissues: triage selected 16: [2266, 2669, 4354, 4396, 4649, 5626, 5789, 6226, 6740, 7127, 7388, 7531, 7949, 8508, 10104, 10571]
+[36m(run_issue_remote pid=5288)[0m /home/ray/anaconda3/envs/py_worker/lib/python3.10/site-packages/pydantic_settings/sources/utils.py:47: IncompleteFieldDefinitionWarning: Field 'lifespan' has an incomplete definition: its annotation contains an unresolved forward reference, so settings sources may fail to correctly resolve its value. Call `model_rebuild()` on the model where the field is defined, once all the referenced types are defined.
+[36m(run_issue_remote pid=5288)[0m   warnings.warn(
+[36m(_ToolServerActor pid=5282)[0m INFO:     Started server process [5282]
+[36m(_ToolServerActor pid=5282)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5282)[0m INFO:     Application startup complete.
+[36m(_ToolServerActor pid=5282)[0m INFO:     Uvicorn running on http://172.22.202.175:8000 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m bash_2266 started at 172.22.202.175:8000 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5287)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+[36m(_ToolServerActor pid=5287)[0m INFO:     Waiting for application shutdown.
+[36m(_ToolServerActor pid=5287)[0m INFO:     Application shutdown complete.
+[36m(_ToolServerActor pid=5287)[0m INFO:     Started server process [5287][32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(_ToolServerActor pid=5287)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5287)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5287)[0m INFO:     Uvicorn running on http://172.22.202.175:8001 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m build_2266 started at 172.22.202.175:8001 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5293)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+[36m(_ToolServerActor pid=5293)[0m INFO:     Waiting for application shutdown.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Application shutdown complete.
+[36m(_ToolServerActor pid=5293)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8001): address already in use
+[36m(_ToolServerActor pid=5293)[0m INFO:     Waiting for application shutdown.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Application shutdown complete.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Started server process [5293][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5293)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5293)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5293)[0m INFO:     Uvicorn running on http://172.22.202.175:8002 (Press CTRL+C to quit)
+[36m(_ToolServerActor pid=5293)[0m INFO:     Started server process [5293]
+[36m(_ToolServerActor pid=5293)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Application startup complete.
+[36m(run_issue_remote pid=5288)[0m lit_2266 started at 172.22.202.175:8002 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(run_issue_remote pid=5288)[0m OpenCodeLLM is experimental: only exercised by unit tests so far, not validated in production.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Shutting down
+[36m(_ToolServerActor pid=5293)[0m INFO:     Waiting for application shutdown.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Application shutdown complete.
+[36m(_ToolServerActor pid=5293)[0m INFO:     Finished server process [5293]
+[36m(run_issue_remote pid=5288)[0m [git] git -c safe.directory=/workspace/circt -C /workspace/circt reset --hard HEAD
+[36m(run_issue_remote pid=5288)[0m [git] git -c safe.directory=/workspace/circt -C /workspace/circt clean -fd
+[36m(run_issue_remote pid=5288)[0m bash_2669 started at 172.22.202.175:8000 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5283)[0m INFO:     Started server process [5283]
+[36m(_ToolServerActor pid=5283)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5283)[0m INFO:     Application startup complete.
+[36m(_ToolServerActor pid=5283)[0m INFO:     Uvicorn running on http://172.22.202.175:8000 (Press CTRL+C to quit)
+[36m(_ToolServerActor pid=5284)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+2026-09-02 11:13:08,443 INFO circtissues: issue #2266 -> not_a_bug  (+None/-None, lit_ok=None, gate=None raw_ops=None final_ops=None)
+[36m(_ToolServerActor pid=5282)[0m INFO:     Shutting down[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Waiting for application shutdown.[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Application shutdown complete.[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5282)[0m INFO:     Finished server process [5282][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Started server process [5284][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5284)[0m INFO:     Uvicorn running on http://172.22.202.175:8001 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m build_2669 started at 172.22.202.175:8001 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5285)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+[36m(_ToolServerActor pid=5285)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8001): address already in use
+[36m(_ToolServerActor pid=5285)[0m INFO:     Waiting for application shutdown.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5285)[0m INFO:     Application shutdown complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5285)[0m INFO:     Started server process [5285][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5285)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5285)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5285)[0m INFO:     Uvicorn running on http://172.22.202.175:8002 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m lit_2669 started at 172.22.202.175:8002 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(run_issue_remote pid=5288)[0m OpenCodeLLM is experimental: only exercised by unit tests so far, not validated in production.
+[36m(_ToolServerActor pid=5285)[0m INFO:     Shutting down
+[36m(_ToolServerActor pid=5285)[0m INFO:     Started server process [5285]
+[36m(_ToolServerActor pid=5285)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5285)[0m INFO:     Application startup complete.
+[36m(_ToolServerActor pid=5285)[0m INFO:     Waiting for application shutdown.
+[36m(_ToolServerActor pid=5285)[0m INFO:     Application shutdown complete.
+[36m(_ToolServerActor pid=5285)[0m INFO:     Finished server process [5285]
+[36m(run_issue_remote pid=5288)[0m [git] git -c safe.directory=/workspace/circt -C /workspace/circt reset --hard HEAD
+[36m(run_issue_remote pid=5288)[0m [git] git -c safe.directory=/workspace/circt -C /workspace/circt clean -fd
+2026-09-02 11:14:33,538 INFO circtissues: issue #2669 -> not_a_bug  (+None/-None, lit_ok=None, gate=None raw_ops=None final_ops=None)
+[36m(_ToolServerActor pid=5292)[0m INFO:     Started server process [5292]
+[36m(_ToolServerActor pid=5292)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5292)[0m INFO:     Application startup complete.
+[36m(_ToolServerActor pid=5292)[0m INFO:     Uvicorn running on http://172.22.202.175:8000 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m bash_4354 started at 172.22.202.175:8000 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5286)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+[36m(_ToolServerActor pid=5283)[0m INFO:     Shutting down[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Waiting for application shutdown.[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Application shutdown complete.[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5283)[0m INFO:     Finished server process [5283][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Started server process [5286][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     Uvicorn running on http://172.22.202.175:8001 (Press CTRL+C to quit)
+[36m(run_issue_remote pid=5288)[0m build_4354 started at 172.22.202.175:8001 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(_ToolServerActor pid=5290)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8000): address already in use
+[36m(_ToolServerActor pid=5290)[0m ERROR:    [Errno 98] error while attempting to bind on address ('172.22.202.175', 8001): address already in use
+[36m(_ToolServerActor pid=5290)[0m INFO:     Waiting for application shutdown.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     Application shutdown complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     Started server process [5290][32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     Waiting for application startup.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     Application startup complete.[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     Uvicorn running on http://172.22.202.175:8002 (Press CTRL+C to quit)
+[36m(_ToolServerActor pid=5290)[0m INFO:     Started server process [5290]
+[36m(_ToolServerActor pid=5290)[0m INFO:     Waiting for application startup.
+[36m(_ToolServerActor pid=5290)[0m INFO:     Application startup complete.
+[36m(run_issue_remote pid=5288)[0m lit_4354 started at 172.22.202.175:8002 on node fd44af3514caf87906d1b5de4fedf2045b8f684d110b2cb3ee35c790
+[36m(run_issue_remote pid=5288)[0m OpenCodeLLM is experimental: only exercised by unit tests so far, not validated in production.
+[36m(run_issue_remote pid=5288)[0m OpenCodeLLM is experimental: only exercised by unit tests so far, not validated in production.
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53206 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53206 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53206 - "GET /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53222 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:53234 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:44280 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:44280 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:60780 - "POST /bash_2266/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5282)[0m INFO:     172.22.202.175:60780 - "POST /bash_2266/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:46950 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:46950 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:46950 - "GET /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:46960 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:34372 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5283)[0m INFO:     172.22.202.175:43766 - "POST /bash_2669/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50876 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50876 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50876 - "GET /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50878 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41910 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50288 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50288 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50296 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:50296 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:42880 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:52748 - "POST /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:42880 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:52748 - "GET /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44900 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 5x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     172.22.202.175:38532 - "POST /lit_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5290)[0m INFO:     172.22.202.175:38532 - "GET /lit_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44902 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44902 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44902 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44902 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:40318 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:44902 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:40318 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:40318 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58674 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:40318 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58674 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:58686 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:55190 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:55190 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:36544 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:36544 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:36544 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:36544 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:56386 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:56386 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:52210 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34106 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34106 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34106 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34106 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34844 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34844 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34844 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:34844 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:50228 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48478 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48484 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:35640 - "POST /build_4354/mcp HTTP/1.1" 200 OK[32m [repeated 3x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48478 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48484 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:50228 - "POST /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48478 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48484 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:35640 - "POST /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:37628 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:37632 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:41144 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:33692 - "POST /bash_4354/mcp HTTP/1.1" 200 OK[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:33692 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:33692 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:33692 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:37628 - "POST /build_4354/mcp HTTP/1.1" 202 Accepted[32m [repeated 2x across cluster][0m
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:48478 - "POST /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5286)[0m INFO:     172.22.202.175:37632 - "POST /build_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:46146 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:46146 - "POST /bash_4354/mcp HTTP/1.1" 202 Accepted
+[36m(_ToolServerActor pid=5292)[0m INFO:     172.22.202.175:46146 - "POST /bash_4354/mcp HTTP/1.1" 200 OK
+[36m(pid=gcs_server)[0m E0902 11:33:49.676943886   31089 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:52.500771042   13544 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:52.500716266   13567 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:52.500761312   13541 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:52.500893727   19298 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:53.933397516   32370 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:53.347958043   31104 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:33:52.642971690   13557 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:34:01.345001788   24904 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:13.341986621   24328 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:34.123924253   13562 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.138602790   24328 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.138589423   24904 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.146358501   13543 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.138581410   32372 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.162371271   13551 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:49.146225125   13554 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:52.834671718   32419 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:54.275199462   32417 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:54.275162544   32424 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:36:54.366129792   24905 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:37:01.263709110   32429 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:37:29.381595398   32417 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:37:34.011539755   32424 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[36m(pid=gcs_server)[0m E0902 11:37:34.011539662   32405 chttp2_transport.cc:2890]             keepalive_ping_end state error: 0 (expect: 1)
+[2026-09-02 11:52:59,244 E 25575 25702] rpc_client.h:203: Failed to connect to GCS within 60 seconds. GCS may have been killed. It's either GCS is terminated by `ray stop` or is killed unexpectedly. If it is killed unexpectedly, see the log file gcs_server.out. https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#logging-directory-structure. The program will terminate.

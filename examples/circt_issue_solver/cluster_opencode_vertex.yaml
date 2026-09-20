@@ -35,20 +35,25 @@ cluster_name: circt_issue_solver_opencode_vertex
 available_node_types:
     circt_llm:
         resources: {"llm": 2}
+        num_cpus: 4
         balance_level: cluster
-        min_workers: 2
-        max_workers: 2
+        min_workers: 1
+        max_workers: 1
         docker:
             image: "ghcr.io/ucb-bar/chia-opencode:latest"
             container_name: "circt_issue_solver_opencode_llm_${USER}"
             pull_before_run: True
             run_options:
                 - --ulimit nofile=65536:65536
-                - --shm-size=10.24gb
+                - --shm-size=2gb        # 8GB host: /dev/shm is RAM-backed and Ray sizes
+                                        #  its plasma object store to it -- 10gb here on a
+                                        #  7.6GB node is what tips it into OOM.
                 - "--user $(id -u):$(id -g)"
                 - "-v ${HOME}/.config/gcloud:/home/ray/.config/gcloud" # Google ADC for Vertex AI
                 - "-e GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}"        # export it on the host before `chia up`
                 - "-e VERTEX_LOCATION=global"                            # Gemini Pro is served from `global` only
+                - "-e DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}"
+                - "-e GEMINI_API_KEY=${GEMINI_API_KEY}"
                 - "-v $SSH_AUTH_SOCK:/ssh-agent"
                 - "-e SSH_AUTH_SOCK=/ssh-agent"
             run_setup_commands:
@@ -58,18 +63,23 @@ available_node_types:
 
     circt_worker:
         resources: {"circt": 1}
+        num_cpus: 4
         balance_level: cluster
-        min_workers: 2
-        max_workers: 2
+        min_workers: 1
+        max_workers: 1
         docker:
             image: "ghcr.io/ucb-bar/chia-circt:latest"
             container_name: "circt_issue_solver_worker_${USER}"
             pull_before_run: True
             run_options:
                 - --ulimit nofile=65536:65536
-                - --shm-size=10.24gb
+                - --shm-size=2gb        # 8GB host: /dev/shm is RAM-backed and Ray sizes
+                                        #  its plasma object store to it -- 10gb here on a
+                                        #  7.6GB node is what tips it into OOM.
                 - "-v $SSH_AUTH_SOCK:/ssh-agent"
                 - "-e SSH_AUTH_SOCK=/ssh-agent"
+                - "-e CMAKE_BUILD_PARALLEL_LEVEL=4"
+                - "-e NINJAFLAGS=-j4"
             run_setup_commands:
                 - echo "user:x:$(id -u):$(id -g)::/home/ray:/bin/bash" >> /etc/passwd
                 - git config --global user.email 'circt_issue_solver@chia' || true
@@ -84,9 +94,9 @@ provider:
 auth:
     ssh_user: ${USER}
 
-# 2 llm + 2 circt = 4 workers, all on the one machine.
-min_workers: 4
-max_workers: 4
+# 1 llm + 1 circt = 2 workers (optimized for 8GB RAM host).
+min_workers: 2
+max_workers: 2
 upscaling_speed: 1.0
 idle_timeout_minutes: 5
 
@@ -103,7 +113,9 @@ head_setup_commands:
     - "source ~/.bashrc && conda activate circtissues"
 head_start_ray_commands:
     - "source ~/.bashrc && conda activate circtissues && ray stop"
-    - "source ~/.bashrc && conda activate circtissues && ulimit -c unlimited && ray start --head --port=6379 --include-dashboard=True --dashboard-agent-listen-port=0"
+    # --object-store-memory caps plasma (default ~30% of RAM ≈ 2.3GB on this
+    #  node) so the build + opencode CLI keep more of the 7.6GB.
+    - "source ~/.bashrc && conda activate circtissues && export RAY_memory_monitor_refresh_ms=0 && ulimit -c unlimited && ray start --head --port=6379 --include-dashboard=True --dashboard-agent-listen-port=0 --object-store-memory=1000000000"
 worker_start_ray_commands:
-    - ray stop
-    - ray start --address=$RAY_HEAD_IP:6379 --dashboard-agent-listen-port=0
+    - export RAY_memory_monitor_refresh_ms=0 && ray stop
+    - export RAY_memory_monitor_refresh_ms=0 && ray start --address=$RAY_HEAD_IP:6379 --dashboard-agent-listen-port=0 --object-store-memory=1000000000

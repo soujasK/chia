@@ -7,6 +7,12 @@ For reference, here is repro.sh:
 $repro
 ~~~
 
+$gate
+
+$fault_slice
+
+$diagnosis
+
 $issue
 
 Approach:

@@ -95,3 +95,14 @@ class NvidiaLLM(_OpenAICompatProvider):
     @ChiaFunction(resources={"nvidia_nim_creds": 0.01})
     def prompt(self, user_message: str, tools: Optional[List[ChiaTool]] = []) -> QueryResult:
         return OpenAICompatLLM.prompt(self, user_message, tools)
+
+
+class DeepSeekLLM(_OpenAICompatProvider):
+    """DeepSeek API."""
+
+    DEFAULT_BASE_URL = "https://api.deepseek.com"
+    DEFAULT_LOGGING_NAME = "deepseek"
+
+    @ChiaFunction(resources={"llm": 1})
+    def prompt(self, user_message: str, tools: Optional[List[ChiaTool]] = []) -> QueryResult:
+        return OpenAICompatLLM.prompt(self, user_message, tools)

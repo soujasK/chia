@@ -616,7 +616,7 @@ def _tail(text: str, n: int = 120) -> str:
 @ChiaFunction(resources={"circt": 1})
 def circt_ninja_build(
     targets: tuple[str, ...] = ("circt-opt",),
-    num_cpus: int = 16,
+    num_cpus: int = 4,
     timeout_seconds: int = 1800,
 ) -> dict:
     """Build CIRCT *targets* with ``ninja -C /workspace/circt/build [-j N]``.
@@ -661,7 +661,7 @@ def circt_ninja_build(
 @ChiaFunction(resources={"circt": 1})
 def circt_warm_build(
     targets: tuple[str, ...] = ("circt-opt", "firtool"),
-    num_cpus: int = 16,
+    num_cpus: int = 4,
     timeout_seconds: int = 5400,
 ) -> dict:
     """Idempotent per-container warm-up: ensure ``lit`` is installed and *targets*

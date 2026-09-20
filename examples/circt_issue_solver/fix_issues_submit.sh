@@ -33,12 +33,16 @@ FLOW_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYBIN="${CIRCT_SOLVER_PY:-python}"
 CHIABIN="${CIRCT_SOLVER_CHIA:-chia}"
 
-: "${GITHUB_TOKEN:?set GITHUB_TOKEN before submitting}"
+GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 
 # --backend opencode reads its Vertex project from GOOGLE_CLOUD_PROJECT; the job
 # env is only what we forward here, so pass it through when set (same as the token).
 GCP_ENV=""
 [ -n "${GOOGLE_CLOUD_PROJECT:-}" ] && GCP_ENV=", \"GOOGLE_CLOUD_PROJECT\": \"${GOOGLE_CLOUD_PROJECT}\""
+DEEPSEEK_ENV=""
+[ -n "${DEEPSEEK_API_KEY:-}" ] && DEEPSEEK_ENV=", \"DEEPSEEK_API_KEY\": \"${DEEPSEEK_API_KEY}\""
+GEMINI_ENV=""
+[ -n "${GEMINI_API_KEY:-}" ] && GEMINI_ENV=", \"GEMINI_API_KEY\": \"${GEMINI_API_KEY}\""
 
 WAIT_FLAG=()
 [ "${NO_WAIT:-0}" = "1" ] && WAIT_FLAG=(--no-wait)
@@ -46,5 +50,5 @@ WAIT_FLAG=()
 exec "$CHIABIN" job submit \
   --address "$ADDR" \
   "${WAIT_FLAG[@]}" \
-  --runtime-env-json "{\"env_vars\": {\"GITHUB_TOKEN\": \"${GITHUB_TOKEN}\"${GCP_ENV}}}" \
+  --runtime-env-json "{\"env_vars\": {\"GITHUB_TOKEN\": \"${GITHUB_TOKEN}\"${GCP_ENV}${DEEPSEEK_ENV}${GEMINI_ENV}}}" \
   -- "$PYBIN" "$FLOW_DIR/circt_issue_loop.py" "$@"

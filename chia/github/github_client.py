@@ -157,6 +157,13 @@ class GithubClient:
                 return resp.text if accept else resp.json()
 
             if status == 401:
+                if "Authorization" in self._session.headers:
+                    self.logger.warning("401 Unauthorized on %s; retrying unauthenticated", url)
+                    self._session.headers.pop("Authorization", None)
+                    resp = self._session.get(url, params=params, timeout=self.timeout_seconds,
+                                             headers={"Accept": accept} if accept else None)
+                    if resp.status_code == 200:
+                        return resp.text if accept else resp.json()
                 raise GithubAuthError(self._error_message(resp))
 
             if status == 403:

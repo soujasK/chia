@@ -40,9 +40,14 @@ CIRCT_TAG = "HEAD"            # the chia-circt checkout is pinned at firtool-1.1
 # circt-verilog is omitted: its ninja target doesn't exist in the SDK-based
 # build (no slang/ImportVerilog), so including it fails the whole `ninja` call.
 # The SDK ships a prebuilt circt-verilog at /opt/circt-sdk/bin for read-only
-# repro use. The other six build cleanly from source.
-TOOL_TARGETS = ("circt-opt", "firtool", "circt-translate",
-                "arcilator", "circt-lec", "circt-bmc")
+# repro use.
+#
+# Small-RAM hosts: only circt-opt + firtool are built from source at warm-up
+# and rebuilt in verify. arcilator / circt-lec / circt-bmc / circt-translate
+# each add a full link (~1-2 GB peak) and are rarely touched by an issue repro
+# -- the SDK ships prebuilt copies at /opt/circt-sdk/bin for read-only use. Add
+# a target back here if a specific repro needs to REBUILD it.
+TOOL_TARGETS = ("circt-opt", "firtool")
 REPRO_DIR  = "/workspace/circt/.circtissues"
 REPRO_PATH = f"{REPRO_DIR}/repro.sh"
 
@@ -73,9 +78,18 @@ OPENCODE_VERTEX_PROJECT  = os.environ.get("GOOGLE_CLOUD_PROJECT")
 OPENCODE_VERTEX_LOCATION = "global"
 BACKEND_DEFAULT_MODEL = {"claude": LLM_MODEL, "antigravity": ANTIGRAVITY_MODEL,
                          "opencode": OPENCODE_MODEL}
-BUILD_JOBS = 16
-TIMEOUTS   = {"assess": 1800, "repro": 1800, "fix": 7200, "regression": 3600, "writeup": 1200}
+BUILD_JOBS = 2   # ninja -j for warm build / verify rebuild / BuildTool; keep low
+                 # on small-RAM hosts (each clang/lld job can want ~1-2 GB).
+                 # This is what the flow actually uses -- circt.py's num_cpus=2
+                 # default only applies to callers that don't pass build_jobs.
+TIMEOUTS   = {"assess": 1800, "repro": 1800, "diagnose": 600, "fix": 7200, "regression": 3600,
+             "writeup": 1200, "gate_semantic_reduce": 3600}
 PENDING_TIMEOUT_S = 1800      # chia_wait stuck-task detection / retry threshold
+
+# Context-Precision Gate (context_precision_gate.py). GATE_ENABLED off == the
+# ungated §5.5 baseline, for the gated-vs-raw comparison the proposal promises.
+GATE_ENABLED      = True
+GATE_TOKEN_BUDGET = 2000      # op-count below which the raw repro skips Reduce
 
 DB_PATH      = str(FLOW_DIR / "issues.db")
 ARTIFACT_DIR = FLOW_DIR / "issue_logs"
@@ -87,9 +101,11 @@ CFG = {
     "backend": LLM_BACKEND, "model": LLM_MODEL,
     "vertex": {"project": OPENCODE_VERTEX_PROJECT, "location": OPENCODE_VERTEX_LOCATION},
     "build_jobs": BUILD_JOBS, "timeouts": TIMEOUTS,
+    "gate_enabled": GATE_ENABLED, "gate_token_budget": GATE_TOKEN_BUDGET,
     "system_prompt":  (_P / "system.md").read_text(),
     "assess_prompt":  (_P / "assess.md").read_text(),
     "repro_prompt":   (_P / "reproduce.md").read_text(),
+    "diagnose_prompt": (_P / "diagnose.md").read_text() if (_P / "diagnose.md").exists() else "",
     "fix_prompt":     (_P / "fix.md").read_text(),
     "regression_prompt": (_P / "regression.md").read_text(),
     "writeup_prompt": (_P / "writeup.md").read_text(),
@@ -108,6 +124,23 @@ CFG = {
 _CHIA_PKG = FLOW_DIR.parent.parent / "chia"
 _PY_MODULES = [str(FLOW_DIR / "circt_util.py"),
                str(FLOW_DIR / "issue_task.py"),
+               str(FLOW_DIR / "context_precision_gate.py"),
+               str(FLOW_DIR / "fault_localizer.py"),
+               str(FLOW_DIR / "fast_lit_slicer.py"),
+               str(FLOW_DIR / "formal_verifier.py"),
+               str(FLOW_DIR / "tablegen_analyzer.py"),
+               str(FLOW_DIR / "ssa_provenance_slicer.py"),
+               str(FLOW_DIR / "soundness_auditor.py"),
+               str(FLOW_DIR / "cegis_oracle.py"),
+               str(FLOW_DIR / "benchmark_ablation.py"),
+               str(FLOW_DIR / "lit_test_synthesizer.py"),
+               str(FLOW_DIR / "dialect_rules.py"),
+               str(FLOW_DIR / "pr_polish_agent.py"),
+               str(FLOW_DIR / "report_dashboard.py"),
+               str(FLOW_DIR / "pipeline_bisector.py"),
+               str(FLOW_DIR / "dialect_fix_memory.py"),
+               str(FLOW_DIR / "sequential_verifier.py"),
+               str(FLOW_DIR / "clang_format_agent.py"),
                str(_CHIA_PKG)]
 # excludes applies to runtime-env uploads (working_dir + py_modules).
 _RUNTIME_ENV_EXCLUDES = ["**/__pycache__", "**/*.pyc"]
@@ -128,7 +161,7 @@ def _persist(issue, res: dict) -> None:
     verdict = {k: res.get(k) for k in ("status", "reproduced", "build_ok", "fixed",
                                        "lit_ok", "lit_passed", "lit_failed",
                                        "lit_failures", "added", "removed", "test_paths",
-                                       "notes")}
+                                       "notes", "gate", "tier1")}
     # Per-phase token/cost usage for backends that report it (antigravity, opencode).
     usage = {phase: blob["usage"] for phase, blob in (res.get("logs") or {}).items()
              if blob.get("usage")}
@@ -159,8 +192,13 @@ def _persist(issue, res: dict) -> None:
     if res.get("lit_tail"):
         art.joinpath("verify_lit.log").write_text(res["lit_tail"])
     db.record(issue, res, CFG["model"], str(art))
-    logger.info("issue #%d -> %s  (+%s/-%s, lit_ok=%s)", issue.number, res.get("status"),
-                res.get("added"), res.get("removed"), res.get("lit_ok"))
+    db.record_gate(issue.number, res.get("gate"))
+    db.record_tier1(issue.number, res.get("tier1"))
+    g = res.get("gate") or {}
+    logger.info("issue #%d -> %s  (+%s/-%s, lit_ok=%s, gate=%s raw_ops=%s final_ops=%s)",
+                issue.number, res.get("status"), res.get("added"), res.get("removed"),
+                res.get("lit_ok"), g.get("status"), g.get("raw_ir_op_count"),
+                g.get("final_op_count"))
 
 
 def main() -> None:
@@ -187,7 +225,16 @@ def main() -> None:
     ap.add_argument("--vertex-location", default=None,
                     help=f"opencode backend: Vertex AI location (default {OPENCODE_VERTEX_LOCATION}; "
                          "Gemini Pro is served from `global` only)")
+    ap.add_argument("--no-gate", action="store_true",
+                    help="disable the Context-Precision Gate (ungated §5.5 baseline; "
+                         "Fix gets the raw repro). Use for the gated-vs-baseline run.")
+    ap.add_argument("--validation-set", action="store_true",
+                    help="run the 16 paper Table-5 issues (validation_set.VALIDATION_SET), "
+                         "skip triage, and print each result's bucket vs. the paper's.")
     args = ap.parse_args()
+
+    if args.no_gate:
+        CFG["gate_enabled"] = False
 
     backend = args.backend or ("antigravity" if args.antigravity else LLM_BACKEND)
     CFG["backend"], CFG["model"] = backend, BACKEND_DEFAULT_MODEL[backend]
@@ -197,7 +244,8 @@ def main() -> None:
         CFG["vertex"]["project"] = args.vertex_project
     if args.vertex_location:
         CFG["vertex"]["location"] = args.vertex_location
-    if backend == "opencode" and not CFG["vertex"]["project"]:
+    is_external = any(p in CFG["model"] for p in ("deepseek", "google", "gemini-2.", "gemini-1."))
+    if backend == "opencode" and not is_external and not CFG["vertex"]["project"]:
         ap.error("--backend opencode needs a GCP project: pass --vertex-project or set GOOGLE_CLOUD_PROJECT")
     logger.info("LLM backend=%s model=%s", CFG["backend"], CFG["model"])
 
@@ -240,6 +288,12 @@ def main() -> None:
     elif args.issue is not None:
         from chia.github.github_issues_node import GithubIssuesNode
         candidates = [GithubIssuesNode(GH_REPO).get_issue(args.issue)]
+    elif args.validation_set:
+        from chia.github.github_issues_node import GithubIssuesNode
+        import validation_set as vset
+        node = GithubIssuesNode(GH_REPO, state="all")
+        candidates = [node.get_issue(n, allow_pull_request=True)
+                      for n in sorted(vset.VALIDATION_SET)]
     else:
         candidates = triage.select(GH_REPO, TRIAGE_POOL, TRIAGE_LABELS,
                                    args.max_issues, db.attempted_numbers())
@@ -261,6 +315,7 @@ def main() -> None:
         tr_issue[id(tr)] = c
 
     pending = tracked
+    results: dict = {}
     try:
         while pending:
             done, pending = chia_wait(pending, num_returns=1,
@@ -268,11 +323,35 @@ def main() -> None:
             for tr in done:
                 issue = tr_issue[id(tr)]
                 try:
-                    _persist(issue, get(tr.ref))
-                except Exception:
+                    res = get(tr.ref)
+                    results[issue.number] = (issue, res)
+                    _persist(issue, res)
+                except Exception as e:
                     logger.exception("issue #%d failed", issue.number)
+                    # Record the failure so --validation-set shows `error`
+                    # (task was killed / raised), not a misleading `<not run>`.
+                    results[issue.number] = (issue, {
+                        "status": "error",
+                        "notes": f"{type(e).__name__}: {str(e)[:200]}"})
     finally:
         db.close_db()
+
+    if args.validation_set:
+        import validation_set as vset
+        print("\n===== validation set: result vs. paper Table 5 =====")
+        ok = 0
+        for n in sorted(vset.VALIDATION_SET):
+            expected = vset.VALIDATION_SET[n]
+            issue, res = results.get(n, (None, {"status": "<not run>"}))
+            labels = getattr(issue, "labels", []) if issue else []
+            got = vset.bucket_of(res, labels)
+            hit = got == expected
+            ok += hit
+            print(f"  #{n:<6} {'MATCH ' if hit else 'DIFFER'}  "
+                  f"got={got:<28} paper={expected:<28} "
+                  f"status={res.get('status')} {(res.get('notes') or '')[:60]}")
+        print(f"\n  {ok}/{len(vset.VALIDATION_SET)} match the paper bucket. "
+              "Investigate every DIFFER (CIRCT has moved past firtool-1.148.0).")
 
 
 if __name__ == "__main__":

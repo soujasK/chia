@@ -434,8 +434,25 @@ class OpenCodeLLM(LLMCallBase):
                 cli.success = True
                 return cli
 
+            # -- Handle rate limits with backoff for free tiers --
+            except RateLimitError as rle:
+                now = datetime.now(timezone.utc)
+                wait_s = 20.0
+                if hasattr(rle, "reset_time") and rle.reset_time:
+                    try:
+                        wait_s = max(5.0, (rle.reset_time - now).total_seconds())
+                    except Exception:
+                        pass
+                wait_s = min(max(wait_s, 10.0), 60.0)
+                self.logger.warning(
+                    "Rate limit on attempt %d/%d, waiting %.1fs for quota window to reset...",
+                    attempt + 1, self.retries, wait_s,
+                )
+                _time.sleep(wait_s)
+                continue
+
             # -- Never retry: propagate immediately --
-            except (RateLimitError, AuthenticationError, BillingError, InvalidRequestError):
+            except (AuthenticationError, BillingError, InvalidRequestError):
                 raise
 
             # -- Retry once: stochastic generation may produce shorter output --
