@@ -4,275 +4,111 @@
   <meta charset="utf-8">
   <title>NEURO-CIRCT: Neuro-Symbolic CEGIS with SSA Provenance Slicing for Autonomous Hardware Compiler Repair</title>
   <style>
-    @page {
-      size: letter;
-      margin: 0.58in 0.56in 0.58in 0.56in;
-    }
-    *, *:before, *:after {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: "Times New Roman", Times, serif;
-      font-size: 8.15pt;
-      line-height: 1.17;
-      color: #000;
-      background: #fff;
-      margin: 0;
-      padding: 0;
-    }
 
-    /* Title & Header Area */
-    .header {
-      text-align: center;
-      margin-bottom: 6pt;
-      border-bottom: 0.5pt solid #333;
-      padding-bottom: 4.5pt;
-    }
-    .paper-title {
-      font-size: 15.2pt;
-      font-weight: bold;
-      letter-spacing: -0.01em;
-      line-height: 1.14;
-      margin-bottom: 3pt;
-    }
-    .author-block {
-      font-size: 9.0pt;
-      font-weight: bold;
-      margin-bottom: 1.2pt;
-    }
-    .author-affil {
-      font-size: 7.5pt;
-      color: #222;
-      margin-bottom: 1.2pt;
-    }
-    .author-link {
-      font-size: 7.1pt;
-      font-family: "Courier New", Courier, monospace;
-      color: #004499;
-    }
+  @page {
+    size: letter;
+    margin: 0.52in 0.52in 0.52in 0.52in;
+  }
+  *, *:before, *:after { box-sizing: border-box; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 8.05pt;
+    line-height: 1.15;
+    color: #000;
+    background: #fff;
+    margin: 0; padding: 0;
+  }
+  .page {
+    width: 100%;
+    height: 9.96in;
+    max-height: 9.96in;
+    break-after: page;
+    page-break-after: always;
+    columns: 2;
+    column-gap: 12pt;
+    text-align: justify;
+    overflow: hidden;
+  }
+  .page-last {
+    width: 100%;
+    height: 9.96in;
+    break-after: auto;
+    page-break-after: auto;
+    columns: 2;
+    column-gap: 12pt;
+    text-align: justify;
+  }
+  .header {
+    text-align: center; margin-bottom: 5pt; border-bottom: 0.5pt solid #333; padding-bottom: 3.5pt;
+  }
+  .paper-title {
+    font-size: 14.5pt; font-weight: bold; letter-spacing: -0.01em; line-height: 1.12; margin-bottom: 2.5pt;
+  }
+  .author-block { font-size: 8.8pt; font-weight: bold; margin-bottom: 1.0pt; }
+  .author-affil { font-size: 7.3pt; color: #222; margin-bottom: 1.0pt; }
+  .author-link { font-size: 7.0pt; font-family: "Courier New", Courier, monospace; color: #004499; }
+  .abstract-container {
+    width: 96%; margin: 0 auto 5pt auto; text-align: justify; font-size: 7.6pt; line-height: 1.14;
+    padding: 3.5pt 5.5pt; border: 0.5pt solid #888; background-color: #fbfbfb;
+  }
+  .abstract-title { font-weight: bold; font-style: italic; }
+  .index-terms { font-size: 7.1pt; margin-top: 2.0pt; }
+  .index-terms span { font-weight: bold; font-style: italic; }
+  h2 {
+    font-size: 8.4pt; font-weight: bold; text-transform: uppercase; margin-top: 4.0pt; margin-bottom: 1.8pt;
+    border-bottom: 0.4pt solid #555; padding-bottom: 0.6pt; break-after: avoid;
+  }
+  h3 {
+    font-size: 7.85pt; font-weight: bold; font-style: italic; margin-top: 3.0pt; margin-bottom: 1.2pt; break-after: avoid;
+  }
+  p { text-indent: 8.0pt; margin-top: 0; margin-bottom: 1.8pt; }
+  p.no-indent { text-indent: 0; }
+  .dropcap {
+    float: left; font-size: 19pt; line-height: 15pt; padding-top: 1pt; padding-right: 2.0pt;
+    font-family: "Times New Roman", Times, serif; font-weight: bold;
+  }
+  ul, ol { margin-left: 9pt; margin-bottom: 1.8pt; font-size: 7.8pt; }
+  li { margin-bottom: 0.8pt; }
+  table.math-table { width: 100%; border-collapse: collapse; margin: 2.5pt 0; break-inside: avoid; }
+  table.math-table td { border: none; padding: 0.4pt 0; vertical-align: middle; }
+  td.math-cell-body { text-align: center; font-family: "Cambria Math", "Times New Roman", serif; font-size: 8.2pt; }
+  td.math-cell-num { text-align: right; width: 20pt; white-space: nowrap; font-size: 8.2pt; color: #111; }
+  table.data-table {
+    width: 100%; border-collapse: collapse; margin: 3.0pt 0 4.0pt 0; font-size: 6.55pt; line-height: 1.10; break-inside: avoid;
+  }
+  table.data-table th, table.data-table td { padding: 1.5pt 2.2pt; text-align: left; }
+  table.data-table thead th { border-top: 0.8pt solid #000; border-bottom: 0.5pt solid #000; font-weight: bold; }
+  table.data-table tbody td { border-bottom: 0.3pt solid #ddd; }
+  table.data-table tfoot td { border-top: 0.5pt solid #000; border-bottom: 0.8pt solid #000; font-weight: bold; }
+  table.data-table caption { font-size: 6.8pt; font-weight: bold; text-align: center; margin-bottom: 1.8pt; }
+  .algo-box {
+    border: 0.5pt solid #222; background: #fff; padding: 2.4pt 3.5pt; margin: 2.8pt 0; font-size: 6.6pt; line-height: 1.11; break-inside: avoid;
+  }
+  .algo-title { font-weight: bold; border-bottom: 0.5pt solid #000; padding-bottom: 0.9pt; margin-bottom: 1.6pt; font-size: 6.8pt; }
+  .algo-line { font-family: "Courier New", Courier, monospace; margin-left: 2.5pt; }
+  .figure-box {
+    border: 0.5pt solid #777; background: #fdfdfd; padding: 2.5pt 3.5pt; margin: 2.8pt 0; font-size: 6.45pt; line-height: 1.09; break-inside: avoid;
+  }
+  .fig-caption { font-size: 6.45pt; font-weight: bold; margin-top: 1.2pt; text-align: center; }
+  pre, code { font-family: "Courier New", Courier, monospace; font-size: 6.1pt; }
+  pre { background: #f6f8fa; border: 0.4pt solid #d0d7de; padding: 1.5pt 2.4pt; overflow: hidden; line-height: 1.07; }
+  .references { font-size: 6.6pt; line-height: 1.06; }
+  .references ol { list-style-type: none; margin-left: 0; padding-left: 0; }
+  .references li { margin-bottom: 1.0pt; text-indent: -9pt; margin-left: 9pt; }
 
-    /* Abstract Block */
-    .abstract-container {
-      width: 95%;
-      margin: 0 auto 6pt auto;
-      text-align: justify;
-      font-size: 7.75pt;
-      line-height: 1.16;
-      padding: 4.0pt 6.0pt;
-      border: 0.5pt solid #888;
-      background-color: #fbfbfb;
-    }
-    .abstract-title {
-      font-weight: bold;
-      font-style: italic;
-    }
-    .index-terms {
-      font-size: 7.3pt;
-      margin-top: 2.2pt;
-    }
-    .index-terms span {
-      font-weight: bold;
-      font-style: italic;
-    }
-
-    /* Two-Column Layout */
-    .columns {
-      columns: 2;
-      column-gap: 12.5pt;
-      text-align: justify;
-    }
-
-    /* Typography & Headings */
-    h2 {
-      font-size: 8.6pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-top: 5.0pt;
-      margin-bottom: 2.2pt;
-      border-bottom: 0.4pt solid #555;
-      padding-bottom: 0.8pt;
-      break-after: avoid;
-    }
-    h3 {
-      font-size: 8.05pt;
-      font-weight: bold;
-      font-style: italic;
-      margin-top: 3.6pt;
-      margin-bottom: 1.6pt;
-      break-after: avoid;
-    }
-    p {
-      text-indent: 8.5pt;
-      margin-top: 0;
-      margin-bottom: 2.2pt;
-    }
-    p.no-indent {
-      text-indent: 0;
-    }
-    .dropcap {
-      float: left;
-      font-size: 21pt;
-      line-height: 17pt;
-      padding-top: 1pt;
-      padding-right: 2.2pt;
-      padding-bottom: 0;
-      font-family: "Times New Roman", Times, serif;
-      font-weight: bold;
-    }
-
-    ul, ol {
-      margin-left: 10pt;
-      margin-bottom: 2.2pt;
-      font-size: 7.95pt;
-    }
-    li {
-      margin-bottom: 1.1pt;
-    }
-
-    /* Mathematical Formulas */
-    table.math-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 3.0pt 0;
-      border: none;
-      background: transparent;
-      break-inside: avoid;
-    }
-    table.math-table td {
-      border: none;
-      padding: 0.5pt 0;
-      vertical-align: middle;
-      background: transparent;
-    }
-    td.math-cell-body {
-      text-align: center;
-      font-family: "Cambria Math", "Latin Modern Math", "TeX Gyre Termes Math", "Times New Roman", Times, serif;
-      font-size: 8.45pt;
-      line-height: 1.24;
-    }
-    td.math-cell-num {
-      text-align: right;
-      width: 22pt;
-      white-space: nowrap;
-      font-family: "Times New Roman", Times, serif;
-      font-size: 8.45pt;
-      font-style: normal;
-      color: #111;
-    }
-
-    /* Tables (Booktabs Style) */
-    .table-container {
-      margin: 3.6pt 0;
-      break-inside: avoid;
-    }
-    .table-title {
-      font-size: 7.05pt;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 1.2pt;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 6.75pt;
-      line-height: 1.10;
-    }
-    table.data-table th, table.data-table td {
-      padding: 1.4pt 1.8pt;
-      text-align: left;
-    }
-    table.data-table th {
-      border-top: 1.0pt solid #000;
-      border-bottom: 0.5pt solid #000;
-      font-weight: bold;
-      background: #fafafa;
-    }
-    tr.sota td {
-      font-weight: bold;
-      background: #f0f6ff;
-    }
-    tr.border-bot td {
-      border-bottom: 1.0pt solid #000;
-    }
-
-    /* Algorithm Box */
-    .algo-box {
-      border: 0.5pt solid #222;
-      background: #fff;
-      padding: 2.8pt 4.0pt;
-      margin: 3.4pt 0;
-      font-size: 6.85pt;
-      line-height: 1.13;
-      break-inside: avoid;
-    }
-    .algo-title {
-      font-weight: bold;
-      border-bottom: 0.5pt solid #000;
-      padding-bottom: 1.1pt;
-      margin-bottom: 2.0pt;
-      font-size: 7.0pt;
-    }
-    .algo-line {
-      font-family: "Courier New", Courier, monospace;
-      margin-left: 3.0pt;
-    }
-
-    /* Code & Figure Boxes */
-    .figure-box {
-      border: 0.5pt solid #777;
-      background: #fdfdfd;
-      padding: 3.0pt 4.0pt;
-      margin: 3.4pt 0;
-      font-size: 6.65pt;
-      line-height: 1.11;
-      break-inside: avoid;
-    }
-    .fig-caption {
-      font-size: 6.65pt;
-      font-weight: bold;
-      margin-top: 1.4pt;
-      text-align: center;
-    }
-    pre, code {
-      font-family: "Courier New", Courier, monospace;
-      font-size: 6.3pt;
-    }
-    pre {
-      background: #f6f8fa;
-      border: 0.4pt solid #d0d7de;
-      padding: 1.8pt 2.8pt;
-      overflow: hidden;
-      line-height: 1.09;
-    }
-
-    /* References */
-    .references {
-      font-size: 6.75pt;
-      line-height: 1.08;
-    }
-    .references ol {
-      list-style-type: none;
-      margin-left: 0;
-    }
-    .references li {
-      margin-bottom: 1.2pt;
-      text-indent: -10pt;
-      margin-left: 10pt;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Full-Width Header -->
+  <div class="page">
+    <!-- Full-Width Header -->
   <div class="header">
     <div class="paper-title">NEURO-CIRCT: Neuro-Symbolic CEGIS with SSA Provenance Slicing for Autonomous Hardware Compiler Repair</div>
-    <div class="author-block">Kudchadkar</div>
+    <div class="author-block">Soujas Kudchadkar</div>
     <div class="author-affil">
       CHIA Hackathon 2026 &bull; Track &sect;5.5: Autonomous CIRCT Issue Solving &bull; A<sup>3</sup> Workshop at MICRO 2026
     </div>
-    <div class="author-link">Artifact Repository: https://github.com/kudchadkar/circt-context-precision-gate</div>
+    <div class="author-link">Artifact Repository: https://github.com/soujasK/chia/tree/track-5.5-context-precision-gate</div>
   </div>
 
   <!-- Full-Width Abstract -->
@@ -281,9 +117,7 @@
     <p class="no-indent index-terms"><span>Index Terms&mdash;</span>Hardware Compilers, CIRCT, MLIR, Automated Program Repair, Neuro-Symbolic Synthesis, Counterexample-Guided Inductive Synthesis, Program Slicing, Equivalence Validation, SMT.</p>
   </div>
 
-  <!-- Two-Column Technical Content -->
-  <div class="columns">
-
+  
     <h2>I. Introduction</h2>
     <p><span class="dropcap">M</span>odern Electronic Design Automation (EDA) flows increasingly rely on modular, extensible intermediate representations (IRs) to decouple high-level hardware description languages from backend physical synthesis. The LLVM CIRCT (Circuit Intermediate Representation for Compilers and Tools) framework, constructed atop MLIR [1], [2], provides an extensible multi-dialect infrastructure unifying digital circuit elaboration, hardware dialect lowering, formal verification, and SystemVerilog emission across dialects including FIRRTL, HW, Comb, and SMT.</p>
     <p>While automated program repair (APR) powered by Large Language Models (LLMs) has demonstrated substantial progress on standard software engineering benchmarks such as SWE-bench [3], applying autonomous repair agents to production hardware compilers exposes three fundamental domain-specific challenges:</p>
@@ -313,6 +147,10 @@
       <li><strong>Syntactic &amp; Compilation Integrity:</strong> The patch &Delta; must compile cleanly with <code>-DLLVM_ENABLE_ASSERTIONS=ON</code> without errors and adhere to LLVM standards (2-space indent, canonical RTTI casting).</li>
     </ol>
 
+    
+  </div>
+
+  <div class="page">
     <h2>III. Architectural Framework</h2>
     <p>NEURO-CIRCT decomposes the compiler repair workflow into eight modular stages (detailed in Algorithm 1):</p>
 
@@ -399,6 +237,10 @@
 
     <p>Evaluating &Phi;<sub>trans</sub> with a QF_BV SMT solver [5], [6] verifies next-state equivalence across unconstrained 1-step transitions.</p>
 
+    
+  </div>
+
+  <div class="page">
     <h2>IV. Empirical Evaluation</h2>
     <p>We evaluate NEURO-CIRCT across the 16-issue CIRCT backlog established in Table 5 of the CHIA study [arXiv:2606.27350, &sect;5.5], which was curated and labeled in collaboration with CIRCT project maintainers. The 16 issues partition into four ground-truth categories: 5 non-bugs (#2266, #2669, #4396, #7127, #10571), 2 already-fixed upstream (#5789, #6226), 4 unclear/underspecified reports (#4649, #5626, #7531, #8508), and 5 confirmed, reproducible bugs (#4354, #6740, #7388, #7949, #10104). Per LLVM policy, good-first-issues (#4354, #6740) were excluded from automated PR submission, leaving three primary defect archetypes for in-depth autonomous repair evaluation:</p>
     <ul>
@@ -596,6 +438,10 @@
     <h3>C. Issue #10104: LayerBlock LTL Scope Isolation</h3>
     <p>In Issue #10104 (filed post-cutoff in 2026), LTL operations cached across `layerblock` regions created out-of-scope dominance errors. NEURO-CIRCT saved and restored cache state across block traversals (Listing 3), matching upstream commit <code>e4bbd3d</code> and passing all 1,022 lit tests.</p>
 
+    
+  </div>
+
+  <div class="page-last">
     <h2>VI. Modular Framework Integration</h2>
     <p>NEURO-CIRCT is structured into 15 self-contained Python modules engineered for direct integration into mainline CHIA:</p>
     <ul>
@@ -653,6 +499,7 @@
       </ol>
     </div>
 
+  
   </div>
 
 </body>
