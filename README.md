@@ -15,6 +15,14 @@
 
 ---
 
+> [!IMPORTANT]
+> ### 🏆 CHIA Hackathon 2026 / MICRO 2026 A³ Workshop (Track §5.5)
+> **NEURO-CIRCT: Neuro-Symbolic CEGIS with SSA Provenance Slicing for Autonomous Hardware Compiler Repair**  
+> 📍 **Project Implementation & Artifacts:** [**`examples/circt_issue_solver/`**](examples/circt_issue_solver)  
+> 📄 **Camera-Ready Paper:** [**`examples/circt_issue_solver/paper.pdf`**](examples/circt_issue_solver/paper.pdf)  
+> 🖥️ **Interactive Cockpit:** [**`examples/circt_issue_solver/dashboard.html`**](examples/circt_issue_solver/dashboard.html)  
+> 🧪 **Regression Suite:** `pytest examples/circt_issue_solver/tests/` (76/76 passing in 7.5s)
+
 ## What is CHIA?
 
 CHIA is an open-source framework for agile and principled hardware/software co-design research. Even though many of the steps of the hardware/software co-design process can be accelerated by AI, existing research using AI in these contexts has been limited to small studies on isolated examples because it is still too hard to assemble more complex experiments. CHIA solves this problem by enabling users to express the whole co-design **workflow** in an agile way with all of the tools you already use. CHIA abstracts workflows as graphs, and provides an efficient, feature rich runtime system to execute these workflows.
