@@ -1,3 +1,16 @@
+# 🏆 NEURO-CIRCT: Autonomous CIRCT Issue Solving
+### *CHIA Hackathon 2026 (Track §5.5) &bull; MICRO 2026 A³ Workshop*
+
+> [!TIP]
+> 👉 **[CLICK HERE TO OPEN THE FULL PROJECT & ARTIFACTS (`examples/circt_issue_solver`)](examples/circt_issue_solver)**
+>
+> * 📄 **Camera-Ready Paper:** [**`paper.pdf`**](examples/circt_issue_solver/paper.pdf) (Strict 4-Page Camera Ready)
+> * 🖥️ **Interactive Cockpit:** [**`dashboard.html`**](examples/circt_issue_solver/dashboard.html) (Live Execution & Equivalence UI)
+> * 🧪 **Regression Suite:** `pytest examples/circt_issue_solver/tests/` (76/76 verified passing)
+> * ⚙️ **Core Pipeline:** [**`examples/circt_issue_solver/context_precision_gate.py`**](examples/circt_issue_solver/context_precision_gate.py)
+
+---
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/_static/chia-logo-inv.png">
@@ -14,14 +27,6 @@
 </p>
 
 ---
-
-> [!IMPORTANT]
-> ### 🏆 CHIA Hackathon 2026 / MICRO 2026 A³ Workshop (Track §5.5)
-> **NEURO-CIRCT: Neuro-Symbolic CEGIS with SSA Provenance Slicing for Autonomous Hardware Compiler Repair**  
-> 📍 **Project Implementation & Artifacts:** [**`examples/circt_issue_solver/`**](examples/circt_issue_solver)  
-> 📄 **Camera-Ready Paper:** [**`examples/circt_issue_solver/paper.pdf`**](examples/circt_issue_solver/paper.pdf)  
-> 🖥️ **Interactive Cockpit:** [**`examples/circt_issue_solver/dashboard.html`**](examples/circt_issue_solver/dashboard.html)  
-> 🧪 **Regression Suite:** `pytest examples/circt_issue_solver/tests/` (76/76 passing in 7.5s)
 
 ## What is CHIA?
 
