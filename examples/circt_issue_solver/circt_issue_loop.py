@@ -73,8 +73,8 @@ ANTIGRAVITY_MODEL = "gemini-3.1-pro-high"
 # mounted into the llm containers (see cluster_opencode_vertex.yaml). The GCP
 # project is site-specific, so like GITHUB_TOKEN it comes from the environment
 # (GOOGLE_CLOUD_PROJECT, also what the cluster yaml forwards) or --vertex-project.
-OPENCODE_MODEL           = "google-vertex/gemini-3.1-pro-preview"
-OPENCODE_VERTEX_PROJECT  = os.environ.get("GOOGLE_CLOUD_PROJECT")
+OPENCODE_MODEL           = "google-vertex/gemini-2.5-pro"
+OPENCODE_VERTEX_PROJECT  = os.environ.get("GOOGLE_CLOUD_PROJECT") or "a3-chia-hack26ath-7735"
 OPENCODE_VERTEX_LOCATION = "global"
 BACKEND_DEFAULT_MODEL = {"claude": LLM_MODEL, "antigravity": ANTIGRAVITY_MODEL,
                          "opencode": OPENCODE_MODEL}

@@ -7,7 +7,9 @@
 > * 📄 **Camera-Ready Paper:** [**`paper.pdf`**](examples/circt_issue_solver/paper.pdf) (Strict 4-Page Camera Ready)
 > * 🖥️ **Interactive Cockpit:** [**`dashboard.html`**](examples/circt_issue_solver/dashboard.html) (Live Execution & Equivalence UI)
 > * 🧪 **Regression Suite:** `pytest examples/circt_issue_solver/tests/` (76/76 verified passing)
-> * ⚙️ **Core Pipeline:** [**`examples/circt_issue_solver/context_precision_gate.py`**](examples/circt_issue_solver/context_precision_gate.py)
+> * 🚀 **Automated Reproduction Runner:** `bash examples/circt_issue_solver/reproduce_results.sh`
+> * 📂 **Pristine Test Logs:** [**`examples/circt_issue_solver/issue_logs/issue_10104/`**](examples/circt_issue_solver/issue_logs/issue_10104/) (1022 passes, 0 failures)
+> * 🐳 **Docker / Dev Container:** Pre-configured [`.devcontainer/`](.devcontainer/) & [`Dockerfile`](examples/circt_issue_solver/Dockerfile)
 
 ---
 

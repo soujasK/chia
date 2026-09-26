@@ -1,0 +1,83 @@
+{
+  "status": "fixed",
+  "reproduced": true,
+  "build_ok": true,
+  "fixed": true,
+  "lit_ok": true,
+  "lit_passed": 1022,
+  "lit_failed": 0,
+  "lit_failures": [],
+  "added": 36,
+  "removed": 1,
+  "test_paths": [
+    "test/Analysis",
+    "test/Conversion",
+    "test/Dialect",
+    "test/Scheduling",
+    "test/Target",
+    "test/Tools",
+    "test/Transforms",
+    "test/Unit",
+    "test/arcilator",
+    "test/circt-as-dis",
+    "test/circt-opt",
+    "test/circt-reduce",
+    "test/circt-synth",
+    "test/circt-test",
+    "test/circt-translate",
+    "test/circt-verilog",
+    "test/firld",
+    "test/firtool",
+    "test/hlstool",
+    "test/kanagawatool",
+    "test/lib",
+    "test/om-linker"
+  ],
+  "notes": null,
+  "gate": {
+    "gate_enabled": true,
+    "failure_type": "miscompilation",
+    "ir_path": "/workspace/circt/.circtissues/repro.mlir",
+    "status": "ok",
+    "raw_ir_op_count": 12,
+    "sliced_op_count": 12,
+    "fast_path": true,
+    "localize_stage": null,
+    "reduce_stalled": null,
+    "semantic_reduce_used": false,
+    "final_op_count": 12
+  },
+  "llm_usage": {
+    "assess": {
+      "input_tokens": 52419,
+      "output_tokens": 1252,
+      "reasoning_tokens": 6585,
+      "cache_read": 76035,
+      "cost_usd": 0.21408899999999997,
+      "num_turns": 12
+    },
+    "repro": {
+      "input_tokens": 352243,
+      "output_tokens": 8120,
+      "reasoning_tokens": 23274,
+      "cache_read": 2432046,
+      "cost_usd": 1.5676231999999994,
+      "num_turns": 80
+    },
+    "fix": {
+      "input_tokens": 295363,
+      "output_tokens": 7102,
+      "reasoning_tokens": 8995,
+      "cache_read": 1256286,
+      "cost_usd": 1.0351471999999997,
+      "num_turns": 62
+    },
+    "writeup": {
+      "input_tokens": 4067,
+      "output_tokens": 475,
+      "reasoning_tokens": 1462,
+      "cost_usd": 0.031378,
+      "num_turns": 1
+    }
+  }
+}

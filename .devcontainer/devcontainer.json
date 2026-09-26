@@ -1,0 +1,24 @@
+{
+  "name": "NEURO-CIRCT (Track §5.5 Reproducibility)",
+  "build": {
+    "dockerfile": "../examples/circt_issue_solver/Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": [
+          "examples/circt_issue_solver/tests"
+        ]
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  },
+  "postCreateCommand": "cd examples/circt_issue_solver && bash reproduce_results.sh",
+  "remoteUser": "root"
+}

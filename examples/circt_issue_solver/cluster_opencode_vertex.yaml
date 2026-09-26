@@ -42,7 +42,7 @@ available_node_types:
         docker:
             image: "ghcr.io/ucb-bar/chia-opencode:latest"
             container_name: "circt_issue_solver_opencode_llm_${USER}"
-            pull_before_run: True
+            pull_before_run: False
             run_options:
                 - --ulimit nofile=65536:65536
                 - --shm-size=2gb        # 8GB host: /dev/shm is RAM-backed and Ray sizes
@@ -70,7 +70,7 @@ available_node_types:
         docker:
             image: "ghcr.io/ucb-bar/chia-circt:latest"
             container_name: "circt_issue_solver_worker_${USER}"
-            pull_before_run: True
+            pull_before_run: False
             run_options:
                 - --ulimit nofile=65536:65536
                 - --shm-size=2gb        # 8GB host: /dev/shm is RAM-backed and Ray sizes
@@ -115,7 +115,7 @@ head_start_ray_commands:
     - "source ~/.bashrc && conda activate circtissues && ray stop"
     # --object-store-memory caps plasma (default ~30% of RAM ≈ 2.3GB on this
     #  node) so the build + opencode CLI keep more of the 7.6GB.
-    - "source ~/.bashrc && conda activate circtissues && export RAY_memory_monitor_refresh_ms=0 && ulimit -c unlimited && ray start --head --port=6379 --include-dashboard=True --dashboard-agent-listen-port=0 --object-store-memory=1000000000"
+    - "source ~/.bashrc && conda activate circtissues && export RAY_memory_monitor_refresh_ms=0 && ulimit -c unlimited && ray start --head --port=6379 --include-dashboard=True --dashboard-agent-listen-port=0 --dashboard-agent-grpc-port=0 --metrics-export-port=0 --object-store-memory=1000000000"
 worker_start_ray_commands:
     - export RAY_memory_monitor_refresh_ms=0 && ray stop
-    - export RAY_memory_monitor_refresh_ms=0 && ray start --address=$RAY_HEAD_IP:6379 --dashboard-agent-listen-port=0 --object-store-memory=1000000000
+    - export RAY_memory_monitor_refresh_ms=0 && ray start --address=$RAY_HEAD_IP:6379 --dashboard-agent-listen-port=0 --dashboard-agent-grpc-port=0 --metrics-export-port=0 --object-store-memory=1000000000

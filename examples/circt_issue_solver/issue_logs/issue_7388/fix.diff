@@ -1,0 +1,111 @@
+diff --git a/lib/Conversion/FIRRTLToHW/LowerToHW.cpp b/lib/Conversion/FIRRTLToHW/LowerToHW.cpp
+index 024c7d0..b0efd54 100644
+--- a/lib/Conversion/FIRRTLToHW/LowerToHW.cpp
++++ b/lib/Conversion/FIRRTLToHW/LowerToHW.cpp
+@@ -881,8 +881,7 @@ void FIRRTLModuleLowering::lowerFileHeader(CircuitOp op,
+ 
+   // Helper function to emit #ifndef guard.
+   auto emitGuard = [&](const char *guard, llvm::function_ref<void(void)> body) {
+-    sv::IfDefOp::create(
+-        b, guard, [] {}, body);
++    sv::IfDefOp::create(b, guard, [] {}, body);
+   };
+ 
+   if (state.usedFileDescriptorLib)
+@@ -3233,8 +3232,7 @@ void FIRRTLLowering::addToAlwaysBlock(
+       auto createIfOp = [&]() {
+         // It is weird but intended. Here we want to create an empty sv.if
+         // with an else block.
+-        insideIfOp = sv::IfOp::create(
+-            builder, reset, [] {}, [] {});
++        insideIfOp = sv::IfOp::create(builder, reset, [] {}, [] {});
+       };
+       if (resetStyle == sv::ResetType::AsyncReset) {
+         sv::EventControl events[] = {clockEdge, resetEdge};
+@@ -3531,25 +3529,31 @@ LogicalResult FIRRTLLowering::visitExpr(SubfieldOp op) {
+ }
+ 
+ LogicalResult FIRRTLLowering::visitExpr(VectorCreateOp op) {
++  if (isZeroBitFIRRTLType(op.getType()))
++    return setLowering(op, Value());
+   auto resultType = lowerType(op.getResult().getType());
+   SmallVector<Value> operands;
+   // NOTE: The operand order must be inverted.
+   for (auto oper : llvm::reverse(op.getOperands())) {
+     auto val = getLoweredValue(oper);
+     if (!val)
+-      return failure();
++      val = hw::ConstantOp::create(builder, op.getLoc(),
++                                   builder.getIntegerType(0), 0);
+     operands.push_back(val);
+   }
+   return setLoweringTo<hw::ArrayCreateOp>(op, resultType, operands);
+ }
+ 
+ LogicalResult FIRRTLLowering::visitExpr(BundleCreateOp op) {
++  if (isZeroBitFIRRTLType(op.getType()))
++    return setLowering(op, Value());
+   auto resultType = lowerType(op.getResult().getType());
+   SmallVector<Value> operands;
+   for (auto oper : op.getOperands()) {
+     auto val = getLoweredValue(oper);
+     if (!val)
+-      return failure();
++      val = hw::ConstantOp::create(builder, op.getLoc(),
++                                   builder.getIntegerType(0), 0);
+     operands.push_back(val);
+   }
+   return setLoweringTo<hw::StructCreateOp>(op, resultType, operands);
+@@ -3572,6 +3576,9 @@ LogicalResult FIRRTLLowering::visitExpr(FEnumCreateOp op) {
+     auto tag = sv::LocalParamOp::create(builder, op.getLoc(), tagType, tagValue,
+                                         tagName);
+     auto bodyType = structType.getFieldType("body");
++    if (!input)
++      input = hw::ConstantOp::create(builder, op.getLoc(),
++                                     builder.getIntegerType(0), 0);
+     auto body = hw::UnionCreateOp::create(builder, bodyType, tagName, input);
+     SmallVector<Value> operands = {tag.getResult(), body.getResult()};
+     return setLoweringTo<hw::StructCreateOp>(op, structType, operands);
+diff --git a/test/Conversion/FIRRTLToHW/zero-width.mlir b/test/Conversion/FIRRTLToHW/zero-width.mlir
+index 355be5e..5e6d782 100644
+--- a/test/Conversion/FIRRTLToHW/zero-width.mlir
++++ b/test/Conversion/FIRRTLToHW/zero-width.mlir
+@@ -89,4 +89,38 @@ firrtl.circuit "Arithmetic" {
+     // CHECK-NEXT: hw.output %false
+   }
+ 
++
++  // CHECK-LABEL: hw.module @FEnumCreate(out out : !hw.struct<tag: i1, body: !hw.union<Some: i8, None: i0>>)
++  firrtl.module @FEnumCreate(out %out: !firrtl.enum<Some: uint<8>, None: uint<0>>) {
++    %c0_ui0 = firrtl.constant 0 : !firrtl.uint<0>
++    %0 = firrtl.enumcreate None(%c0_ui0) : (!firrtl.uint<0>) -> !firrtl.enum<Some: uint<8>, None: uint<0>>
++    firrtl.matchingconnect %out, %0 : !firrtl.enum<Some: uint<8>, None: uint<0>>
++    // CHECK-DAG: %c0_i0 = hw.constant 0 : i0
++    // CHECK-DAG: %None = sv.localparam {value = true} : i1
++    // CHECK: [[UNION:%.+]] = hw.union_create "None", %c0_i0 : !hw.union<Some: i8, None: i0>
++    // CHECK: [[STRUCT:%.+]] = hw.struct_create (%None, [[UNION]]) : !hw.struct<tag: i1, body: !hw.union<Some: i8, None: i0>>
++    // CHECK: hw.output [[STRUCT]]
++  }
++
++  // CHECK-LABEL: hw.module @BundleCreate(out out : !hw.struct<a: i8, b: i0>)
++  firrtl.module @BundleCreate(out %out: !firrtl.bundle<a: uint<8>, b: uint<0>>) {
++    %c0_ui8 = firrtl.constant 0 : !firrtl.uint<8>
++    %c0_ui0 = firrtl.constant 0 : !firrtl.uint<0>
++    %0 = firrtl.bundlecreate %c0_ui8, %c0_ui0 : (!firrtl.uint<8>, !firrtl.uint<0>) -> !firrtl.bundle<a: uint<8>, b: uint<0>>
++    firrtl.matchingconnect %out, %0 : !firrtl.bundle<a: uint<8>, b: uint<0>>
++    // CHECK: %c0_i8 = hw.constant 0 : i8
++    // CHECK-DAG: %c0_i0 = hw.constant 0 : i0
++    // CHECK: [[STRUCT:%.+]] = hw.aggregate_constant [0 : i8, 0 : i0] : !hw.struct<a: i8, b: i0>
++    // CHECK: hw.output [[STRUCT]]
++  }
++
++  // CHECK-LABEL: hw.module @VectorCreate(out out : !hw.array<2xi0>)
++  firrtl.module @VectorCreate(out %out: !firrtl.vector<uint<0>, 2>) {
++    %c0_ui0 = firrtl.constant 0 : !firrtl.uint<0>
++    %0 = firrtl.vectorcreate %c0_ui0, %c0_ui0 : (!firrtl.uint<0>, !firrtl.uint<0>) -> !firrtl.vector<uint<0>, 2>
++    firrtl.matchingconnect %out, %0 : !firrtl.vector<uint<0>, 2>
++    // CHECK-DAG: %c0_i0 = hw.constant 0 : i0
++    // CHECK: [[ARRAY:%.+]] = hw.aggregate_constant [0 : i0, 0 : i0] : !hw.array<2xi0>
++    // CHECK: hw.output [[ARRAY]]
++  }
+ }

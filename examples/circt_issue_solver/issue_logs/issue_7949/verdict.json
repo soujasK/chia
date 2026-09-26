@@ -1,0 +1,59 @@
+{
+  "status": "attempted",
+  "reproduced": true,
+  "build_ok": false,
+  "fixed": false,
+  "lit_ok": false,
+  "lit_passed": 0,
+  "lit_failed": 0,
+  "lit_failures": [],
+  "added": 0,
+  "removed": 0,
+  "test_paths": [
+    "test/Analysis",
+    "test/Conversion",
+    "test/Dialect",
+    "test/Scheduling",
+    "test/Target",
+    "test/Tools",
+    "test/Transforms",
+    "test/Unit",
+    "test/arcilator",
+    "test/circt-as-dis",
+    "test/circt-opt",
+    "test/circt-reduce",
+    "test/circt-synth",
+    "test/circt-test",
+    "test/circt-translate",
+    "test/circt-verilog",
+    "test/firld",
+    "test/firtool",
+    "test/hlstool",
+    "test/kanagawatool",
+    "test/lib",
+    "test/om-linker"
+  ],
+  "notes": null,
+  "gate": {
+    "gate_enabled": true,
+    "failure_type": "miscompilation",
+    "ir_path": "",
+    "status": "no_ir",
+    "raw_ir_op_count": null,
+    "sliced_op_count": null,
+    "fast_path": null,
+    "localize_stage": null,
+    "reduce_stalled": null,
+    "semantic_reduce_used": false,
+    "final_op_count": null
+  },
+  "llm_usage": {
+    "writeup": {
+      "input_tokens": 8063,
+      "output_tokens": 779,
+      "reasoning_tokens": 5075,
+      "cost_usd": 0.0170539,
+      "num_turns": 1
+    }
+  }
+}

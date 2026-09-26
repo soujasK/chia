@@ -1,0 +1,25 @@
+{
+  "status": "not_a_bug",
+  "reproduced": false,
+  "build_ok": null,
+  "fixed": null,
+  "lit_ok": null,
+  "lit_passed": null,
+  "lit_failed": null,
+  "lit_failures": null,
+  "added": null,
+  "removed": null,
+  "test_paths": null,
+  "notes": "This issue is an enhancement request to improve FIRRTL canonicalization by generically replacing zero-width operands with zero-width constants. Because the final generated SystemVerilog is correct and identical in both cases, there is no miscompile, crash, or wrong output; it is a missed optimization in the intermediate IR.",
+  "gate": null,
+  "llm_usage": {
+    "assess": {
+      "input_tokens": 37596,
+      "output_tokens": 4808,
+      "reasoning_tokens": 3487,
+      "cache_read": 60341,
+      "cost_usd": 0.18680020000000003,
+      "num_turns": 8
+    }
+  }
+}

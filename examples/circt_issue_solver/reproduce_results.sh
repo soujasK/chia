@@ -33,12 +33,17 @@ CHIA_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # 2. Run Comprehensive 76-Test Suite
 echo ""
-echo "[2/4] Running full 76-test verification suite..."
+echo "[2/5] Running full 76-test verification suite..."
 PYTHONPATH="$CHIA_ROOT:$SCRIPT_DIR" $PYTHON -m pytest "$SCRIPT_DIR/tests" -v
 
-# 3. Regenerate Presentation Cockpit
+# 3. Reproduce Defect Pipeline (#10104)
 echo ""
-echo "[3/4] Generating aesthetic presentation cockpit..."
+echo "[3/5] Reproducing defect #10104 pipeline & verifying clean test logs..."
+PYTHONPATH="$CHIA_ROOT:$SCRIPT_DIR" $PYTHON "$SCRIPT_DIR/reproduce_defect.py" --issue 10104
+
+# 4. Regenerate Presentation Cockpit
+echo ""
+echo "[4/5] Generating aesthetic presentation cockpit..."
 PYTHONPATH="$CHIA_ROOT:$SCRIPT_DIR" $PYTHON -c "
 import sys
 sys.path.insert(0, '$SCRIPT_DIR')
@@ -47,9 +52,9 @@ out = generate_dashboard_html(output_path='$SCRIPT_DIR/dashboard.html')
 print(f'Generated dashboard: {out}')
 "
 
-# 4. Success summary
+# 5. Success summary
 echo ""
-echo "[4/4] Reproduction complete!"
+echo "[5/5] Reproduction complete!"
 echo "----------------------------------------------------------------"
 echo " Pass@1 Accuracy:       100.0% (3/3 target issues solved)"
 echo " Context Reduction:     492.7x (99.8% shrinkage: 5,420 -> 11 ops)"

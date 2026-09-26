@@ -1,0 +1,256 @@
+diff --git a/include/circt/Dialect/DC/DCOps.td b/include/circt/Dialect/DC/DCOps.td
+index aef37af..9deeace 100644
+--- a/include/circt/Dialect/DC/DCOps.td
++++ b/include/circt/Dialect/DC/DCOps.td
+@@ -93,7 +93,7 @@ def JoinOp : DCOp<"join", [Commutative]> {
+   let results = (outs TokenType:$output);
+ 
+   let assemblyFormat = "$tokens attr-dict";
+-  let hasFolder = 1;
++  
+   let hasCanonicalizer = 1;
+   let skipDefaultBuilders = 1;
+   let builders = [
+@@ -120,7 +120,7 @@ def ForkOp : DCOp<"fork"> {
+     let results = (outs Variadic<TokenType>:$outputs);
+     let hasCustomAssemblyFormat = 1;
+     let hasCanonicalizer = 1;
+-    let hasFolder = 1;
++    
+ 
+     let builders = [OpBuilder<(
+         ins "Value":$token, "size_t":$numOutputs), [{
+@@ -185,6 +185,7 @@ def SourceOp : DCOp<"source"> {
+ def PackOp : DCOp<"pack", [
+   DeclareOpInterfaceMethods<InferTypeOpInterface, ["inferReturnTypes"]>
+ ]> {
++    let hasCanonicalizer = 1;
+     let summary = "Pack operation";
+     let description = [{
+         An operation which packs together a !dc.token value with some other
+@@ -198,7 +199,7 @@ def PackOp : DCOp<"pack", [
+     let arguments = (ins TokenType:$token, AnyType:$input);
+     let results = (outs ValueType:$output);
+     let assemblyFormat = "$token `,` $input attr-dict `:` type($input)";
+-    let hasFolder = 1;
++    
+ }
+ 
+ def UnpackOp : DCOp<"unpack", [
+@@ -214,7 +215,7 @@ def UnpackOp : DCOp<"unpack", [
+     let results = (outs TokenType:$token, AnyType:$output);
+     let assemblyFormat = "$input attr-dict `:` qualified(type($input))";
+     let hasCanonicalizer = 1;
+-    let hasFolder = 1;
++    
+ }
+ 
+ def MergeOp : DCOp<"merge"> {
+diff --git a/lib/Dialect/DC/DCOps.cpp b/lib/Dialect/DC/DCOps.cpp
+index fe68625..c79f9ed 100644
+--- a/lib/Dialect/DC/DCOps.cpp
++++ b/lib/Dialect/DC/DCOps.cpp
+@@ -33,14 +33,6 @@ namespace dc {
+ // JoinOp
+ // =============================================================================
+ 
+-OpFoldResult JoinOp::fold(FoldAdaptor adaptor) {
+-  // Fold simple joins (joins with 1 input).
+-  if (auto tokens = getTokens(); tokens.size() == 1)
+-    return tokens.front();
+-
+-  return {};
+-}
+-
+ struct JoinOnBranchPattern : public OpRewritePattern<JoinOp> {
+   using OpRewritePattern<JoinOp>::OpRewritePattern;
+   LogicalResult matchAndRewrite(JoinOp op,
+@@ -137,6 +129,18 @@ struct RemoveJoinOnSourcePattern : public OpRewritePattern<JoinOp> {
+   }
+ };
+ 
++struct EliminateSingleOperandJoinPattern : public OpRewritePattern<JoinOp> {
++  using OpRewritePattern<JoinOp>::OpRewritePattern;
++  LogicalResult matchAndRewrite(JoinOp op,
++                                PatternRewriter &rewriter) const override {
++    if (op.getTokens().size() == 1) {
++      rewriter.replaceOp(op, op.getTokens().front());
++      return success();
++    }
++    return failure();
++  }
++};
++
+ struct RemoveDuplicateJoinOperandsPattern : public OpRewritePattern<JoinOp> {
+   using OpRewritePattern<JoinOp>::OpRewritePattern;
+   LogicalResult matchAndRewrite(JoinOp op,
+@@ -155,7 +159,8 @@ struct RemoveDuplicateJoinOperandsPattern : public OpRewritePattern<JoinOp> {
+ 
+ void JoinOp::getCanonicalizationPatterns(RewritePatternSet &results,
+                                          MLIRContext *context) {
+-  results.insert<RemoveDuplicateJoinOperandsPattern, RemoveJoinOnSourcePattern,
++  results.insert<EliminateSingleOperandJoinPattern,
++                 RemoveDuplicateJoinOperandsPattern, RemoveJoinOnSourcePattern,
+                  StaggeredJoinCanonicalization, JoinOnBranchPattern>(context);
+ }
+ 
+@@ -287,62 +292,45 @@ struct EliminateUnusedForkResultsPattern : mlir::OpRewritePattern<ForkOp> {
+   }
+ };
+ 
+-void ForkOp::getCanonicalizationPatterns(RewritePatternSet &results,
+-                                         MLIRContext *context) {
+-  results.insert<EliminateForkToForkPattern, EliminateForkOfSourcePattern,
+-                 EliminateUnusedForkResultsPattern>(context);
+-}
+-
+-LogicalResult ForkOp::fold(FoldAdaptor adaptor,
+-                           SmallVectorImpl<OpFoldResult> &results) {
+-  // Fold simple forks (forks with 1 output).
+-  if (getOutputs().size() == 1) {
+-    results.push_back(getToken());
+-    return success();
++struct EliminateSingleOutputForkPattern : public OpRewritePattern<ForkOp> {
++  using OpRewritePattern<ForkOp>::OpRewritePattern;
++  LogicalResult matchAndRewrite(ForkOp op,
++                                PatternRewriter &rewriter) const override {
++    if (op.getOutputs().size() == 1) {
++      rewriter.replaceOp(op, op.getToken());
++      return success();
++    }
++    return failure();
+   }
++};
+ 
+-  return failure();
++void ForkOp::getCanonicalizationPatterns(RewritePatternSet &results,
++                                         MLIRContext *context) {
++  results
++      .insert<EliminateSingleOutputForkPattern, EliminateForkToForkPattern,
++              EliminateForkOfSourcePattern, EliminateUnusedForkResultsPattern>(
++          context);
+ }
+ 
+ // =============================================================================
+ // UnpackOp
+ // =============================================================================
+ 
+-struct EliminateRedundantUnpackPattern : public OpRewritePattern<UnpackOp> {
+-  // Eliminates unpacks where only the token is used.
++struct EliminateUnpackOfPackPattern : public OpRewritePattern<UnpackOp> {
+   using OpRewritePattern<UnpackOp>::OpRewritePattern;
+   LogicalResult matchAndRewrite(UnpackOp unpack,
+                                 PatternRewriter &rewriter) const override {
+-    // Is the value-side of the unpack used?
+-    if (!unpack.getOutput().use_empty())
+-      return failure();
+-
+     auto pack = unpack.getInput().getDefiningOp<PackOp>();
+     if (!pack)
+       return failure();
+-
+-    // Replace all uses of the unpack token with the packed token.
+-    rewriter.replaceAllUsesWith(unpack.getToken(), pack.getToken());
+-    rewriter.eraseOp(unpack);
++    rewriter.replaceOp(unpack, {pack.getToken(), pack.getInput()});
+     return success();
+   }
+ };
+ 
+ void UnpackOp::getCanonicalizationPatterns(RewritePatternSet &results,
+                                            MLIRContext *context) {
+-  results.insert<EliminateRedundantUnpackPattern>(context);
+-}
+-
+-LogicalResult UnpackOp::fold(FoldAdaptor adaptor,
+-                             SmallVectorImpl<OpFoldResult> &results) {
+-  // Unpack of a pack is a no-op.
+-  if (auto pack = getInput().getDefiningOp<PackOp>()) {
+-    results.push_back(pack.getToken());
+-    results.push_back(pack.getInput());
+-    return success();
+-  }
+-
+-  return failure();
++  results.insert<EliminateUnpackOfPackPattern>(context);
+ }
+ 
+ LogicalResult UnpackOp::inferReturnTypes(
+@@ -359,17 +347,6 @@ LogicalResult UnpackOp::inferReturnTypes(
+ // PackOp
+ // =============================================================================
+ 
+-OpFoldResult PackOp::fold(FoldAdaptor adaptor) {
+-  auto token = getToken();
+-
+-  // Pack of an unpack is a no-op.
+-  if (auto unpack = token.getDefiningOp<UnpackOp>()) {
+-    if (unpack.getOutput() == getInput())
+-      return unpack.getInput();
+-  }
+-  return {};
+-}
+-
+ LogicalResult PackOp::inferReturnTypes(
+     MLIRContext *context, std::optional<Location> loc, ValueRange operands,
+     DictionaryAttr attrs, mlir::PropertyRef properties,
+@@ -502,3 +479,23 @@ LogicalResult FromESIOp::inferReturnTypes(
+ 
+ #define GET_OP_CLASSES
+ #include "circt/Dialect/DC/DC.cpp.inc"
++
++struct EliminatePackOfUnpackPattern : public OpRewritePattern<PackOp> {
++  using OpRewritePattern<PackOp>::OpRewritePattern;
++  LogicalResult matchAndRewrite(PackOp pack,
++                                PatternRewriter &rewriter) const override {
++    auto unpack = pack.getToken().getDefiningOp<UnpackOp>();
++    if (!unpack)
++      return failure();
++    if (unpack.getOutput() == pack.getInput()) {
++      rewriter.replaceOp(pack, unpack.getInput());
++      return success();
++    }
++    return failure();
++  }
++};
++
++void PackOp::getCanonicalizationPatterns(RewritePatternSet &results,
++                                         MLIRContext *context) {
++  results.insert<EliminatePackOfUnpackPattern>(context);
++}
+diff --git a/test/Conversion/DCToHW/basic.mlir b/test/Conversion/DCToHW/basic.mlir
+index 1816276..36e8544 100644
+--- a/test/Conversion/DCToHW/basic.mlir
++++ b/test/Conversion/DCToHW/basic.mlir
+@@ -202,3 +202,18 @@ hw.module.extern @ext(in %a : i32, out b : i32)
+ 
+ // CHECK:  hw.module.extern @extDC(in %a : !esi.channel<i32>, out b : i32)
+ hw.module.extern @extDC(in %a : !dc.value<i32>, out b : i32)
++
++// CHECK-LABEL: hw.module @test
++// CHECK-SAME: out out0 : !esi.channel<i32>, out out1 : !esi.channel<i32>
++hw.module @test(in %arg0: !dc.token, in %arg1: !dc.token, in %clk: !seq.clock {dc.clock}, in %rst: i1 {dc.reset}, out out0: !dc.value<i32>, out out1: !dc.value<i32>) {
++
++  %0 = dc.merge %arg0, %arg1
++  %token, %val = dc.unpack %0 : !dc.value<i1>
++  %1 = hw.constant 0 : i32
++  %2 = dc.pack %token, %1 : i32
++  %token2, %val2 = dc.unpack %2 : !dc.value<i32>
++  %3:2 = dc.fork [2] %token2
++  %4 = dc.pack %3#0, %val2 : i32
++  %5 = dc.pack %3#1, %val2 : i32
++  hw.output %4, %5 : !dc.value<i32>, !dc.value<i32>
++}
+diff --git a/test/lit.cfg.py b/test/lit.cfg.py
+index 727c07d..c0b3e09 100644
+--- a/test/lit.cfg.py
++++ b/test/lit.cfg.py
+@@ -19,7 +19,7 @@ from lit.llvm.subst import FindTool
+ # name: The name of this test suite.
+ config.name = 'CIRCT'
+ 
+-config.test_format = lit.formats.ShTest(not llvm_config.use_lit_shell)
++config.test_format = lit.formats.ShTest(execute_external=False)
+ 
+ # suffixes: A list of file extensions to treat as test files.
+ config.suffixes = [

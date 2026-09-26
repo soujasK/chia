@@ -1,0 +1,25 @@
+{
+  "status": "not_a_bug",
+  "reproduced": false,
+  "build_ok": null,
+  "fixed": null,
+  "lit_ok": null,
+  "lit_passed": null,
+  "lit_failed": null,
+  "lit_failures": null,
+  "added": null,
+  "removed": null,
+  "test_paths": null,
+  "notes": "The `-verilog` flag is a testing/debugging option designed to dump all emitted files (including auxiliary files like `.f` file lists) into a single stream for `FileCheck`, not to produce a valid monolithic Verilog file for synthesis. As confirmed by the maintainer, producing non-compliant Verilog by concatenating these output files is the intended behavior of this flag; users are expected to use `-split-verilog` for actual hardware compilation workflows.",
+  "gate": null,
+  "llm_usage": {
+    "assess": {
+      "input_tokens": 47314,
+      "output_tokens": 596,
+      "reasoning_tokens": 2718,
+      "cache_read": 11784,
+      "cost_usd": 0.13675279999999998,
+      "num_turns": 10
+    }
+  }
+}

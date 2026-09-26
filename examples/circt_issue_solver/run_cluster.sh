@@ -5,7 +5,7 @@ source ~/.bashrc
 conda activate circtissues
 
 export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
-export GOOGLE_CLOUD_PROJECT="${GOOGLE_CLOUD_PROJECT:-level-approach-472713-p1}"
+export GOOGLE_CLOUD_PROJECT="${GOOGLE_CLOUD_PROJECT:-a3-chia-hack26ath-7735}"
 export CHIA_HEAD=localhost
 export RAY_memory_usage_threshold=0.99
 export RAY_memory_monitor_refresh_ms=0
@@ -22,7 +22,8 @@ cd /mnt/c/Users/kudch/Downloads/circt-context-precision-gate/chia/examples/circt
 
 case "$1" in
     down)
-        chia down cluster_opencode_vertex.yaml || true
+        chia down -y --no-scoped cluster_opencode_vertex.yaml || true
+        docker rm -f circt_issue_solver_opencode_llm_${USER}-0 circt_issue_solver_worker_${USER}-0 2>/dev/null || true
         ray stop || true
         ;;
     up)

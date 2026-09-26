@@ -115,7 +115,7 @@ def run_issue_remote(issue_md: str, number: int, cfg: dict,
             # examples/memcpy).
             from chia.models.opencode import OpenCodeLLM, AdditionalModelProvider
             provider_id, _, model_id = cfg["model"].partition("/")
-            if provider_id == "google" or "gemini-2." in cfg["model"] or "gemini-1." in cfg["model"]:
+            if provider_id != "google-vertex" and (provider_id == "google" or "gemini-2." in cfg["model"] or "gemini-1." in cfg["model"]):
                 gemini_key = os.environ.get("GEMINI_API_KEY", "")
                 actual_model = model_id if model_id else cfg["model"]
                 provider = AdditionalModelProvider(

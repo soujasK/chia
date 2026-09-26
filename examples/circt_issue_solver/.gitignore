@@ -1,6 +1,8 @@
 issues.db
 issues.db-journal
-issue_logs/
+# Track curated reproduction run logs and test verdicts for benchmark defects
+!issue_logs/
+!issue_logs/**
 issue_logs_to_pr/
 __pycache__/
 *.pyc
